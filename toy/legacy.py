@@ -163,7 +163,7 @@ for frame in tqdm.trange(20000):
 
     for s in range(substeps):
         substep()
-    #colors = np.array([0x068587, 0xED553B, 0xEEEEF0], dtype=np.uint32)
-    #pos = x.to_numpy()[:, :2]
-    #gui.circles(pos, radius=1.5, color=colors[material.to_numpy()])
-    #gui.show()  # Change to gui.show(f'{frame:06d}.png') to write images to disk
+    colors = np.array([0x068587, 0xED553B, 0xEEEEF0], dtype=np.uint32)
+    pos = x.to_numpy()[:, :2]
+    gui.circles(pos, radius=1.5, color=colors[material.to_numpy()])
+    gui.show(f'{frame:06d}.png')  # Change to gui.show(f'{frame:06d}.png') to write images to disk
