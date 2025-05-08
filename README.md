@@ -36,3 +36,5 @@ AttributeError: 'PlasticineEnv' object has no attribute 'seed'
 ```
 
 This was a gym error, so I replaced gym==0.26.2 with gym==0.21.0, and it seems fixed. I put all the dependencies in setup.py, so should be fast to install now.
+
+*NOTE*: I cannot run this on my laptop; CUDA driver not found.
