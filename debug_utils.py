@@ -34,3 +34,11 @@ def plot_target_density(target_density):
     plt.plot(np.unique(data))
 
     plt.show()
+
+
+def plot_3d_pcd(pcd):
+    pl = pv.Plotter()
+    mesh = pv.PolyData(pcd)
+    actor = pl.add_mesh(mesh, style='points',opacity=1, color='blue', point_size=5)
+    pl.set_scale(xscale=1.0, yscale=1.0, zscale=1.0)
+    pl.show()

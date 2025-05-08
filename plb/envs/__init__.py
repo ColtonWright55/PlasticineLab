@@ -5,7 +5,7 @@ from gym import register
 ENVS = []
 for env_name in ['Move', 'Torus', 'Rope', 'Writer', 'HardWriter', "Pinch", "Rollingpin", "Chopsticks", "Table",
                  'TripleMove', 'TripleWrite', 'Assembly', 'ToothPaste', 'HardRope', 'FingerWriter',
-                 'MultiStage_Write', 'MultiStage_Pinch', 'MultiStage_Rope']:
+                 'MultiStage_Write', 'MultiStage_Pinch', 'MultiStage_Rope', 'AgF1']:
     for id in range(5):
         register(
             id=f'{env_name}-v{id + 1}',
