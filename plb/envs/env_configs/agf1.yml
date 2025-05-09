@@ -7,7 +7,7 @@ SHAPES:
   - shape: wavefront
     color: 100
     n_particles: 10000
-    wavefront_path: envs/assets/AgF1_x_offset_0_5L.obj
+    wavefront_path: envs/assets/AgF1_stock.obj
 PRIMITIVES:
   - shape: RollingPin
     h: 0.3

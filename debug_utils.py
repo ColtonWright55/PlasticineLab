@@ -41,4 +41,5 @@ def plot_3d_pcd(pcd):
     mesh = pv.PolyData(pcd)
     actor = pl.add_mesh(mesh, style='points',opacity=1, color='blue', point_size=5)
     pl.set_scale(xscale=1.0, yscale=1.0, zscale=1.0)
+    _ = pl.show_grid()
     pl.show()
