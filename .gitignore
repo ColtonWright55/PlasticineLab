@@ -1,6 +1,8 @@
 /images
 /output
 
+ignore_*.py
+
 *.jpg
 *.png
 data

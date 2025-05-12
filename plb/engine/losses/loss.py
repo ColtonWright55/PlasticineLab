@@ -49,8 +49,16 @@ class Loss:
             if path is not None and len(path) > 0:
                 if not os.path.exists(path):
                     path = os.path.join(os.path.dirname(os.path.abspath(__file__)), '../../', path)
-                grids = np.load(path)
+
+                ext = os.path.splitext(path)[1].lower()
                 print(f'loading target density {path}')
+                if ext == '.npy':
+                    grids = np.load(path)
+                elif ext == '.obj':
+                    grids = self._load_wavefront_density(path)
+                else:
+                    raise NotImplementedError(f"Target density extension {ext} is not supported!")
+
             else:
                 grids = np.array(grids)
             self.target_density.from_numpy(grids)
@@ -59,6 +67,41 @@ class Loss:
             self.grid_mass.from_numpy(grids)
             self.iou()
             self._target_iou = self._iou
+
+    def _load_wavefront_density(self, path=None):
+        # TODO: When you run Move-v1/Rollingpin-v1, there are #/5262 unique values in the target_loss. Almost all values in the grid are zero, but almost every point in the target shape has a unique value. Seems like the density rises as you approach the CoM. For some reason. For now we will just try only a few unique values with the center of the part having a certain density.
+        import open3d as o3d
+
+        # This is all we need to calculate the grid. Remember if MPMSimulator.grid_size is (1,1,2) instead of (1,1,1) then res will be (64,64,128) instead of (64,64,64) and dx will be the same
+        res = self.res
+        dx = self.dx
+
+        mesh = o3d.io.read_triangle_mesh(path)
+        mesh.compute_vertex_normals()
+        mesh = o3d.t.geometry.TriangleMesh.from_legacy(mesh)
+        scene = o3d.t.geometry.RaycastingScene()
+        _ = scene.add_triangles(mesh)  # we do not need the geometry ID for mesh
+
+        # We need a grid that has shape res and lives over the dimensions grid_size
+        # The grid should be zero outside of target geometry, and smoothly transition to some
+        # value at the center of the shape.
+
+        x = np.linspace(0, res[0]*dx, res[0])
+        y = np.linspace(0, res[0]*dx, res[1])
+        z = np.linspace(0, res[0]*dx, res[2])
+        grid = np.stack(np.meshgrid(x, y, z, indexing='ij'), axis=-1)
+        grid_flat = grid.reshape(-1, 3).astype(np.float32)
+
+        # Use that for occupancy check
+        occupancy = scene.compute_occupancy(grid.astype(np.float32)).numpy()
+        from scipy import ndimage
+
+        distance = ndimage.distance_transform_edt(occupancy)
+        distance = distance/np.max(distance)
+        distance *= 0.0005 # Max density in several environments is ~0.0005
+        grids = distance
+
+        return grids
 
     def initialize(self):
         self.sdf_weight[None] = self.cfg.weight.sdf

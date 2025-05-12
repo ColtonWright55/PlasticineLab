@@ -11,7 +11,7 @@ for env_name in ['Move', 'Torus', 'Rope', 'Writer', 'HardWriter', "Pinch", "Roll
             id=f'{env_name}-v{id + 1}',
             entry_point=f"plb.envs.env:PlasticineEnv",
             kwargs={'cfg_path': f"./env_configs/{env_name.lower()}.yml", "version": id + 1},
-            max_episode_steps=50
+            max_episode_steps=100
         )
 
 

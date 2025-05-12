@@ -116,7 +116,7 @@ class Shapes:
         if not os.path.exists(wavefront_path):
             wavefront_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), '../../', wavefront_path)
 
-        # We are going to get signed distance field from open3d, then use that to generate many numpy points inside the wavefront mesh.
+        # We are going to get occupancy field from open3d, then use that to generate many numpy points inside the wavefront mesh.
         # This code is almost exactly from https://www.open3d.org/docs/latest/tutorial/geometry/distance_queries.html
         mesh = o3d.io.read_triangle_mesh(wavefront_path)
         mesh.compute_vertex_normals()
@@ -146,7 +146,6 @@ class Shapes:
         # Get interior points
         points = grid_flat[occupancy_mask]
         selected = points[np.random.choice(len(points), n_particles, replace=False)]
-        print("Hello")
         p = selected
         self.add_object(p, color, init_rot=init_rot)
 

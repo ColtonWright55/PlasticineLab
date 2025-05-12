@@ -1,18 +1,19 @@
 SIMULATOR:
   E: 5000.
-  n_particles: 10000
+  n_particles: 5000
   yield_stress: 50.
   ground_friction: 1.5
+  quality: 1.0
 SHAPES:
   - shape: wavefront
     color: 100
-    n_particles: 10000
+    n_particles: 5000
     wavefront_path: envs/assets/AgF1_stock.obj
 PRIMITIVES:
   - shape: RollingPin
     h: 0.3
     r: 0.03
-    init_pos: (0.5, 0.123, 0.5)
+    init_pos: (0.5, 0.2, 0.5)
     init_rot: (0.707, 0.707, 0., 0.)
     color: (0.8, 0.8, 0.8)
     friction: 0.9
@@ -21,7 +22,7 @@ PRIMITIVES:
       scale: (0.6666666666666667, 0.06666666666666668, 0.001)
 ENV:
   loss:
-    target_path: envs/assets/AgF3D1-v1.npy
+    target_path: envs/assets/AgF13D-target-v1.npy
 RENDERER:
   camera_pos: (0.5, 2.5, 2.)
   camera_rot: (1.0, 0.)
@@ -30,16 +31,16 @@ RENDERER:
 VARIANTS:
   - ENV:
       loss:
-        target_path: envs/assets/Rollingpin3D-v1.npy
+        target_path: envs/assets/AgF13D-target-v1.obj
   - ENV:
       loss:
-        target_path: envs/assets/AgF3D1-v2.npy
+        target_path: envs/assets/AgF13D-target-v2.obj
   - ENV:
       loss:
-        target_path: envs/assets/AgF3D1-v3.npy
+        target_path: envs/assets/AgF13D-target-v3.obj
   - ENV:
       loss:
-        target_path: envs/assets/AgF3D1-v4.npy
+        target_path: envs/assets/AgF13D-target-v4.obj
   - ENV:
       loss:
-        target_path: envs/assets/AgF3D1-v5.npy
+        target_path: envs/assets/AgF13D-target-v5.obj

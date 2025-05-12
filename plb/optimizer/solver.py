@@ -84,7 +84,7 @@ class Solver:
         cfg.optim = Optimizer.default_config()
         cfg.n_iters = 100
         cfg.softness = 666.
-        cfg.horizon = 50
+        cfg.horizon = 60
 
         cfg.init_range = 0.
         cfg.init_sampler = 'uniform'
