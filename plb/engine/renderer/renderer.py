@@ -574,7 +574,7 @@ class Renderer:
         render_mode = kwargs.get('render_mode', 'rgb')
         self.visualize_rgb[None] = 1 if 'rgb' in render_mode else 0
         self.visualize_depth[None] = 1 if 'd' in render_mode else 0
-        visualize_target = kwargs.get('target', 0)
+        visualize_target = kwargs.get('target', 1)
         self.visualize_shape[None] = kwargs.get('shape', 1)
         self.visualize_primitive[None] = kwargs.get('primitive', 1)
         self.color_buffer.fill(0)

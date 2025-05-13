@@ -1,25 +1,37 @@
 SIMULATOR:
   E: 5000.
-  n_particles: 5000
+  n_particles: 10000
   yield_stress: 50.
   ground_friction: 1.5
   quality: 1.0
 SHAPES:
   - shape: wavefront
     color: 100
-    n_particles: 5000
+    n_particles: 10000
     wavefront_path: envs/assets/AgF1_stock.obj
 PRIMITIVES:
-  - shape: RollingPin
-    h: 0.3
-    r: 0.03
-    init_pos: (0.5, 0.2, 0.5)
-    init_rot: (0.707, 0.707, 0., 0.)
+
+  - shape: Box
+    size: (0.05, 0.01, 0.05)
+    round: 0.
+    init_pos: (0.65, 0.15, 0.5)
     color: (0.8, 0.8, 0.8)
     friction: 0.9
     action:
       dim: 3
-      scale: (0.6666666666666667, 0.06666666666666668, 0.001)
+      scale: (0.01, 0.01, 0.01)
+
+  - shape: Box
+    size: (0.05, 0.01, 0.05)
+    round: 0.
+    init_pos: (0.35, 0.15, 0.5)
+    color: (0.8, 0.8, 0.8)
+    friction: 0.9
+    action:
+      dim: 3
+      scale: (0.01, 0.01, 0.01)
+
+
 ENV:
   loss:
     target_path: envs/assets/AgF13D-target-v1.npy
