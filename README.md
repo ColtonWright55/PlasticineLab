@@ -38,3 +38,17 @@ AttributeError: 'PlasticineEnv' object has no attribute 'seed'
 This was a gym error, so I replaced gym==0.26.2 with gym==0.21.0, and it seems fixed. I put all the dependencies in setup.py, so should be fast to install now.
 
 *NOTE*: I cannot run this on my laptop; CUDA driver not found.
+
+
+
+
+
+## Performance
+
+Maybe we could use this to see what's going on:
+
+Overview
+
+Taichi includes a collection of profiling tools to help with code debugging and optimization. These tools collect hardware and Taichi-related information to measure program performance and identify bottlenecks.
+
+https://docs.taichi-lang.org/docs/profiler
