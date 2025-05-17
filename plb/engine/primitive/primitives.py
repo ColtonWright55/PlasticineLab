@@ -534,6 +534,75 @@ class Knife(Primitive):
         return cfg
 
 
+class AgFTool(Primitive):
+    def __init__(self, **kwargs):
+        super(AgFTool, self).__init__(**kwargs)
+        self.size = ti.Vector.field(self.dim, self.dtype, shape=())
+        self.round = ti.field(self.dtype, shape=())
+
+    def initialize(self):
+        super(AgFTool, self).initialize()
+        self.size[None] = self.cfg.size
+        self.round[None] = self.cfg.round
+
+    @ti.func
+    def _sdf(self, f, grid_pos):
+        # p: vec3,b: vec3
+        q = ti.abs(grid_pos) - self.size[None]
+        out = length(max(q, 0.0))
+        if ti.static(self.dim == 3):
+            out += min(max(q[0], max(q[1], q[2])), 0.0)
+        else:
+            out += min(max(q[0], q[1]), 0.0)
+        return out - self.round[None]
+
+    @ti.func
+    def _normal(self, f, grid_pos):
+        q = ti.abs(grid_pos) - self.size[None]
+        inside = ti.cast(0., self.dtype)
+        if ti.static(self.dim == 2):
+            inside = max(q[0], q[1])
+        else:
+            inside = max(q[0], max(q[1], q[2]))
+
+        f = ti.cast(inside <= 0, self.dtype)
+
+        normal = ti.cast(q == inside, self.dtype) * f
+
+        #yy = ti.cast(q == inside, self.dtype)
+        #print('q', q)
+        #print('xx', inside, normal, yy)
+
+        q2 = max(q, 0.0)
+        normal += q2/length(q2) * (1-f)
+
+        mask = (2. * ti.cast(grid_pos > 0, self.dtype) - 1.)
+        #print('yy', q2, normal)
+        #print('mask', mask)
+
+        normal = normal * mask
+        #return normalize(normal)
+        return normal/ti.sqrt(normal.dot(normal) + 1e-30)
+
+
+    @classmethod
+    def default_config(cls):
+        cfg = Primitive.default_config()
+        cfg.size = (0.1, 0.1, 0.1)
+        cfg.round = 0.
+        return cfg
+
+    def get_corners(self):
+        assert self.dim == 2
+        size = self.cfg.size
+        return np.array([
+            [-size[0], -size[1]],
+            [-size[0], size[1]],
+            [size[0], size[1]],
+            [size[0], -size[1]],
+        ])
+
+
 class Primitives:
     def __init__(self, cfgs, max_timesteps=1024, dim=3, dtype=ti.f64):
         outs = []

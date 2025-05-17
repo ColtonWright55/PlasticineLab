@@ -5,14 +5,18 @@
  - Run `python3 -m plb.algorithms.solve [algo] [env_name] --path [output-dir]`. It will run algorithms `algo` for environment `env-name` and store results in `output-dir`. For example
     `python3 -m plb.algorithms.solve action Move-v1 --path output` will run call an Adam optimizer to optimize an action sequence in environment `Move-v1`
 
+`python -m plb.algorithms.solve --algo action  --env_name AgF1-v1 --path output` To solve agility forge environment with action algorithm
 
 
-
-## Installation / Upstream repo edits
+## Installation
 
 As of 5/1/2025, it's working on Windows with Python 3.8.10 in a .venv after running `.\.venv\Scripts\activate`, `pip install -e .`, and finally `python -m plb.algorithms.solve --algo action --env_name Move-v1 --path output`.
 
-### Upstream repo edits
+`python -m plb.algorithms.solve --algo action  --env_name AgF1-v1 --path output`
+
+## Upstream repo edits
+
+#### Running / Startup
 
 This was a pain to get working. [Taichi](https://github.com/taichi-dev/taichi) has made many API changes since this paper came out, so I had to hunt down the correct Taichi version. There were other dependencies not originally in the setup file, like [Open3D](https://github.com/isl-org/Open3D) & [tensorboardX](https://github.com/lanpa/tensorboardX). Also, we are using gym==0.21.0 and not gym--0.26.2 / gymnasium.
 
@@ -39,6 +43,15 @@ This was a gym error, so I replaced gym==0.26.2 with gym==0.21.0, and it seems f
 
 *NOTE*: I cannot run this on my laptop; CUDA driver not found.
 
+
+#### Support for .obj as soft bodies
+
+Added a method to Shapes to generate soft bodies from .obj files:
+
+plb.engine.shapes.shape_maker.Shapes.add_wavefront
+
+
+#### Primitives tool constaints for AgF Kinematics
 
 
 
