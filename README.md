@@ -44,16 +44,24 @@ This was a gym error, so I replaced gym==0.26.2 with gym==0.21.0, and it seems f
 *NOTE*: I cannot run this on my laptop; CUDA driver not found.
 
 
-#### Support for .obj as soft bodies
+#### Support for .obj as soft bodies and target_density
+
+
+Note: The .obj's need to be scaled so that longest dimension is shorter than 1, and must be pointed in the +y direction, with the origin of the part at (0.5,0,0.5)
 
 Added a method to Shapes to generate soft bodies from .obj files:
 
 plb.engine.shapes.shape_maker.Shapes.add_wavefront
 
+Gridded the obj, used a open3d function to see which cells are inside or outside the mesh, and then from that occupancy grid create many points inside the mesh. Randomly throw out some so that there are n points. The engine only sees those 10000 or so points, not the obj or occupancy grids.
+
+Similar method was added to create loss functions from .obj.
+
+`Loss.load_target_density` edited to call new method `Loss._load_wavefront_density` if the path ends in .obj. `Loss._load_wavefront_density` uses open3d to greate target_density grid from an obj.
 
 #### Primitives tool constaints for AgF Kinematics
 
-
+The Gripper primitive is very close already to what we wanted. There was a weird bug where Gripper instances would always call the property `Primitive.init_state` instead of `Gripper.init_state`, which would set up the state wrong and error. Fastest fix was to copy and paste `Primtive.initialize` method into `Gripper`, and then to create another property `Gripper.gripper_init_state`, because that one is not overwritten by `Primitive.init_state`.
 
 
 ## Performance

@@ -309,6 +309,12 @@ class Gripper(Box):
         self.size = ti.Vector.field(3, self.dtype, shape=())
         self.size[None] = self.cfg.size
         self.minimal_gap = self.cfg.minimal_gap
+        
+        # From debugging Primitive.init_state behavior
+        # print("Current class:", self.__class__)
+        # print("MRO:", self.__class__.__mro__)
+        # print(self.init_state)
+        # print(self.gripper_init_state)
 
     @ti.kernel
     def forward_kinematics(self, f: ti.i32):
@@ -399,7 +405,27 @@ class Gripper(Box):
 
     @property
     def init_state(self):
+        print("Gripper.init_state called")
         return self.cfg.init_pos + self.cfg.init_rot + (self.cfg.init_gap,)
+
+    @property
+    def gripper_init_state(self):
+        print("Gripper.init_state called")
+        return self.cfg.init_pos + self.cfg.init_rot + (self.cfg.init_gap,)
+
+    # Testing to get around Gripper.init_state calling Primitive.init_state for some reason...
+    def initialize(self):
+        cfg = self.cfg
+        self.set_state(0, self.gripper_init_state) # This is from Primitive.initialize, but when we ran that as it was in plb originally, it would call Primitive.init_state not Gripper.init_state
+        self.xyz_limit.from_numpy(np.array([cfg.lower_bound, cfg.upper_bound]))
+        self.color[None] = cfg.color
+        self.friction[None] = self.cfg.friction  # friction coefficient
+        if self.action_dim > 0:
+            self.action_scale[None] = cfg.action.scale
+        if self.needs_impact:
+            self.make_inertia()
+        self.size[None] = self.cfg.size
+        self.round[None] = self.cfg.round
 
     def get_state(self, f):
         return np.append(super(Gripper, self).get_state(f), self.gap[f])
