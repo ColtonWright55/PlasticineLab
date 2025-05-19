@@ -42,6 +42,16 @@ env.render('plt')
 
 env.set_state(**state)
 env.renderer.spp = 3
+
+poses = [
+    ((0.5, 0.33, -2.0), (0.0, 0.0)),
+]
+images = []
+for pos, rot in poses:
+    env.renderer.set_camera_pose(camera_pos=pos, camera_rot=rot)
+
+env.render('plt')
+
 images = []
 for i in range(50):
     if i < 10:
@@ -53,3 +63,5 @@ for i in range(50):
     img2 = env.render('rgb_array')
 
     images.append(img2)
+    cv2.imwrite(f"output/{i:04d}.png", img2[..., ::-1].astype(np.uint8))
+
